@@ -12,7 +12,7 @@ public class BreadthSearch : MonoBehaviour
 	public List<BSNode> UgandaKnukles = new List<BSNode>();
 	public BSNode searchBFS(float data, BSNode start)
 	{
-		LinkedList<BSNode> visited = new LinkedList<BSNode>();
+		List<BSNode> visited = new List<BSNode>();
 		Queue<BSNode> queue = new Queue<BSNode>();
 
 		//data = endValue;
@@ -20,7 +20,7 @@ public class BreadthSearch : MonoBehaviour
 
 		
 
-		visited.AddLast(start);
+		visited.Add(start);
 		queue.Enqueue(start);
 
 		while (queue.Count > 0)
@@ -35,8 +35,9 @@ public class BreadthSearch : MonoBehaviour
 
 				if (!visited.Contains(tmp))
 				{
-					visited.AddFirst(tmp);
+					visited.Add(tmp);
 					queue.Enqueue(tmp);
+					StartCoroutine(ColorCoroutine(visited));
 					UgandaKnukles.Add(tmp);
 					Debug.Log("lol " + tmp.data);
 				}
@@ -54,5 +55,17 @@ public class BreadthSearch : MonoBehaviour
     private void OnMouseDown()
     {
 		Debug.Log(searchBFS(endValue, begining).data);
+	}
+
+	IEnumerator ColorCoroutine(List<BSNode> bSNodes)
+	{
+		SpriteRenderer spriteRenderer;
+		yield return new WaitForSeconds(2);
+		for (int i = 0; i < bSNodes.Count; i++)
+		{
+			yield return new WaitForSeconds(2);
+			spriteRenderer = bSNodes[i].transform.GetComponent<SpriteRenderer>();
+			spriteRenderer.color = new Color(255, 0, 0);
+		}
 	}
 }

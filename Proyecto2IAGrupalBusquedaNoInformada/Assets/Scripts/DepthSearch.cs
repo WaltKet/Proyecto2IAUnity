@@ -2,20 +2,23 @@
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DepthSearch : MonoBehaviour
 {
-	public DSNode end;
-	public DSNode begining;
-	public DSNode last;
-	public DSNode lookForDPS(float data, DSNode node)
+	public BSNode end;
+	public BSNode begining;
+	public BSNode last;
+	public Graph graph;
+	public int endvalue;
+	public List<BSNode> visited;
+	public BSNode lookForDPS(float data, BSNode node)
 	{
-		data = end.value;
-		node = begining;
+
 
 		if (node.Equals(null)) return null;
-
-		if (node.value.Equals(data))
+		visited.Add(node);
+		if (node.getData().Equals(data))
 		{
 			last = node;
 			return node;
@@ -23,15 +26,37 @@ public class DepthSearch : MonoBehaviour
 
 		//Aqui se puede añadir a un stack
 
-		for (int i = 0; i < node.vertex.Count; i++)
+		for (int i = 0; i < node.adyacentes.Count; i++)
 		{
-			if (!node.vertex[i].Equals(null))
-				lookForDPS(data, node.vertex[i]);
-			if (last.value.Equals(data))
+			if (!node.adyacentes[i].Equals(null))
+				lookForDPS(data, node.adyacentes[i]);
+			if (last.getData().Equals(data))
 				return last;
 		}
 
 		//Aqui se borraría del stack
 		return null;
+	}
+
+	IEnumerator ChangeColor()
+    {
+		SpriteRenderer spriteRenderer;
+		yield return new WaitForSeconds(2);
+		for (int i = 0; i < visited.Count; i++)
+		{
+			yield return new WaitForSeconds(2);
+			spriteRenderer = visited[i].transform.GetComponent<SpriteRenderer>();
+			spriteRenderer.color = new Color(255, 0, 0);
+		}
+	}
+	private void OnMouseDown()
+	{
+		lookForDPS(endvalue, begining);
+		StartCoroutine(ChangeColor());
+	}
+
+	public void ClearBeautifulDrawing()
+    {
+		SceneManager.LoadScene("SampleScene");
 	}
 }

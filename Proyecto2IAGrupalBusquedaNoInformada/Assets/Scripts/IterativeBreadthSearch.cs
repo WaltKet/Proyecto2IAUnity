@@ -45,6 +45,7 @@ public class IterativeBreadthSearch : MonoBehaviour
                 {
                     stack.Push(current.adyacentes[i]);
                     UgandaKnukles.Add(current.adyacentes[i]);
+                    StartCoroutine(ColorCoroutine(visited));
                     Debug.Log(current.adyacentes[i].data);
                 }
             }
@@ -71,6 +72,19 @@ public class IterativeBreadthSearch : MonoBehaviour
         //    }
         //}
         //return null;
+    }
+
+
+    IEnumerator ColorCoroutine(List<BSNode> bSNodes)
+    {
+        SpriteRenderer spriteRenderer;
+        yield return new WaitForSeconds(2);
+        for (int i = 0; i < bSNodes.Count; i++)
+        {
+        yield return new WaitForSeconds(2);
+        spriteRenderer = bSNodes[i].transform.GetComponent<SpriteRenderer>();
+        spriteRenderer.color = new Color (255,0,0);
+        }
     }
     void Start()
     {
